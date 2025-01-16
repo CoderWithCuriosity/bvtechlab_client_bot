@@ -1,0 +1,36 @@
+[
+  {
+    "19.01.2025": {
+      "date": "SUNDAY 19.01.2025",
+      "status": "Appointments are available",
+      "link": "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3511&dateStr=19.01.2025"
+    },
+    "26.01.2025": {
+      "date": "SUNDAY 26.01.2025",
+      "status": "Appointments are available",
+      "link": "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3511&dateStr=26.01.2025"
+    }
+  },
+  {
+    "02.02.2025": {
+      "date": "SUNDAY 02.02.2025",
+      "status": "Appointments are available",
+      "link": "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3511&dateStr=02.02.2025"
+    },
+    "09.02.2025": {
+      "date": "SUNDAY 09.02.2025",
+      "status": "Appointments are available",
+      "link": "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3511&dateStr=09.02.2025"
+    },
+    "16.02.2025": {
+      "date": "SUNDAY 16.02.2025",
+      "status": "Appointments are available",
+      "link": "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3511&dateStr=16.02.2025"
+    },
+    "23.02.2025": {
+      "date": "SUNDAY 23.02.2025",
+      "status": "Appointments are available",
+      "link": "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3511&dateStr=23.02.2025"
+    }
+  }
+]

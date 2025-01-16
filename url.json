@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Short-time visa (Schengen)",
+    "url": "https://service2.diplo.de/rktermin/extern/choose_categoryList.do?locationCode=kara&realmId=771",
+    "content": [
+      {
+        "name": "Booking of appointments for Schengen visas (Business, Visit, Tourism) & Airport Transit Visas",
+        "url": "https://service2.diplo.de/rktermin/extern/appointment_showMonth.do?locationCode=doha&realmId=1448&categoryId=3476"
+      },
+      {
+        "name": "Booking of appointments for Schengen visas (Biometrics already taken for a Schengen visa application during the last 59 months)",
+        "url": "https://service2.diplo.de/rktermin/extern/appointment_showMonth.do?locationCode=doha&realmId=1448&categoryId=3511"
+      }
+    ]
+  }
+]
