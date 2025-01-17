@@ -51,7 +51,7 @@ async function bookAppointment(browser, link) {
   await fillInput('input[name="lastname"]', userData.lastName);
   await fillInput('input[name="email"]', userData.email);
   await fillInput('input[name="emailrepeat"]', userData.email);
-  await fillInput('input[name="passportnumber"]', userData.passportNumber);
+  await fillInput('input[name="fields[0].content"]', userData.passportNumber);
   await fillInput('input[name="phonenumber"]', userData.phoneNumber);
   await fillInput('input[name="Province"]', userData.Province);
   await fillInput('input[name="Country"]', userData.Country);
@@ -77,7 +77,7 @@ async function bookAppointment(browser, link) {
         // Fill the CAPTCHA solution in the input field (adjust selector as needed)
         await page.type('input[name="captchaText"]', solution); // Replace with the actual input name or selector
         // Optionally, submit the form or click a button after solving the CAPTCHA
-        await page.click('input[type="submit"]');
+        await page.click('input[name="action:appointment_addAppointment"]');
         await page.waitForNavigation();
         return;
       } else {

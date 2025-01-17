@@ -9,6 +9,9 @@ const month = String(today.getMonth() + 1).padStart(2, "0");
 const year = today.getFullYear();
 const baseUrl = "https://service2.diplo.de/rktermin/";
 const bookAppointment = require("./modules/bookAppointment");
+const TARGET_TIME = new Date();
+TARGET_TIME.setHours(3, 59, 56);
+const TARGET_URL = 1;
 
 (async () => {
   const filePath = "./url.json";
@@ -46,9 +49,66 @@ const bookAppointment = require("./modules/bookAppointment");
       console.error(`Error reading url.json: ${error.message}`);
       return;
     }
-    for (const category of urlData) {
-      const page = await browser.newPage();
-      for (const contentItem of category.content) {
+    if (!TARGET_URL) {
+      let urlToCheckAvail =
+        urlData[TARGET_URL].url +
+        `&dateStr=${day}.${String(parseInt(month) + (i - 1)).padStart(
+          2,
+          "0"
+        )}.${year}`;
+      await page.goto(urlToCheckAvail, { waitUntil: "domcontentloaded" });
+      await getPage(page);
+      console.log("checking appointments");
+      // Extract appointment data
+      const appointments = await page.evaluate(baseUrl => {
+        const data = {};
+        const appointmentElements = document.querySelectorAll(
+          'div[style="width: 100%;"]'
+        );
+
+        appointmentElements.forEach(element => {
+          const dateElement = element.querySelector("h4");
+          const linkElement = element.querySelector("a.arrow");
+
+          if (dateElement && linkElement) {
+            const fullDateText = dateElement.textContent.trim();
+            const dateMatch = fullDateText.match(/\d{2}\.\d{2}\.\d{4}/);
+            if (dateMatch) {
+              const key = dateMatch[0];
+              const status = linkElement.textContent.trim();
+              const link = linkElement.getAttribute("href");
+
+              // Store the data with date, status, and link
+              data[key] = {
+                name: urlData[TARGET_URL].name,
+                date: fullDateText,
+                status: status,
+                link: baseUrl + link
+              };
+            }
+          }
+        });
+
+        return data;
+      }, baseUrl);
+      if (Object.entries(appointments).length > 0) {
+        availArr.push(appointments);
+      }
+      console.log(availArr);
+
+      // Save the updated URLs to a JSON file
+      fs.writeFileSync(
+        "appointments.json",
+        JSON.stringify(availArr, null, 2),
+        "utf-8"
+      );
+      await page.close();
+      return;
+    }
+
+
+    const page = await browser.newPage();
+    for (const contentItem of urlData) {
         let availArr = [];
         for (let i = 1; i <= 2; i++) {
           await page.setCacheEnabled(false);
@@ -83,17 +143,16 @@ const bookAppointment = require("./modules/bookAppointment");
               const linkElement = element.querySelector("a.arrow");
 
               if (dateElement && linkElement) {
-                const fullDateText = dateElement.textContent.trim(); // E.g., "SUNDAY 19.01.2025"
-                const dateMatch = fullDateText.match(/\d{2}\.\d{2}\.\d{4}/); // Extract "19.01.2025"
-
+                const fullDateText = dateElement.textContent.trim();
+                const dateMatch = fullDateText.match(/\d{2}\.\d{2}\.\d{4}/);
                 if (dateMatch) {
                   const key = dateMatch[0];
-                  const status = linkElement.textContent.trim(); // E.g., "Appointments are available"
-                  const link = linkElement.getAttribute("href"); // Get the link URL from the 'href' attribute
+                  const status = linkElement.textContent.trim();
+                  const link = linkElement.getAttribute("href");
 
                   // Store the data with date, status, and link
                   data[key] = {
-                    name: category.content.name,
+                    name: contentItem.name,
                     date: fullDateText,
                     status: status,
                     link: baseUrl + link
@@ -116,10 +175,9 @@ const bookAppointment = require("./modules/bookAppointment");
           "utf-8"
         );
       }
-    }
+      await page.close();
+    
   }
-
-
 
   async function checkAvailability() {
     try {
@@ -141,7 +199,10 @@ const bookAppointment = require("./modules/bookAppointment");
   try {
     // await getPages();
     // await checkAvailability();
-    const workingUrl = await bookAppointment(browser, "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3511&dateStr=23.02.2025");
+    const workingUrl = await bookAppointment(
+      browser,
+      "https://service2.diplo.de/rktermin/extern/appointment_showDay.do?locationCode=doha&realmId=1448&categoryId=3476&dateStr=26.01.2025"
+    );
     console.log(workingUrl);
   } catch (error) {
     console.error(`Error opening the URL: ${error.message}`);
